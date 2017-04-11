@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layoutPadrao">
+
+<head>
+<title>Pesquisa de títulos</title>
+</head>
+
+<div layout:fragment="conteudo">
+
+	<div class="container-fluid">
+		<div layout:include="mensagemGeral"></div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="clearfix">
+					<h1 class="panel-title aw-titulo-panel">Pesquisa de títulos</h1>
+					<a class="btn btn-link aw-link-panel" th:href="@{/produto/novo}">Novo
+						Produto</a>
+				</div>
+			</div>
+
+			<div class="panel-body">
+				<form method="GET" class="form-horizontal" th:action="@{/produto}"
+					th:object="${filtro}">
+					<div class="form-group">
+						<div class="col-sm-4">
+							<div class="input-group">
+								<input class="form-control"
+									placeholder="Qual Produto você está procurando?"
+									autofocus="autofocus" th:field="*{nome}"></input> <span
+									class="input-group-btn">
+									<button type="submit" class="btn btn-default">
+										<i class="glyphicon glyphicon-search"></i>
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</form>
+
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th class="text-center col-md-1">#</th>
+								<th>Nome</th>
+								<th>Descrição</th>
+								<th class="text-center col-md-1">Valor</th>
+								<th class="text-center col-md-1">Qtd</th>
+								<th class="text-center col-md-2">Data de Entrada</th>
+								<th class="text-center col-md-2">Data de vencimento</th>
+								<th class="text-center col-md-1">Status</th>
+								<th class="col-md-1"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="produto : ${produtos}">
+								<td class="text-center" th:text="${produto.id}"></td>
+								<td th:text="${produto.nome}"></td>
+								<td th:text="${produto.descricao}"></td>
+								<td class="text-center" th:text="|R$ ${{produto.valor}}|"></td>
+								<td class="text-center" th:text="${produto.quantidade}"></td>
+								<td class="text-center" th:text="${{produto.dataEntrada}}"></td>
+								<td class="text-center" th:text="${{produto.dataVencimento}}"></td>
+								<td class="text-center" th:attr="data-role=${produto.id}">
+									<span class="label" th:text="${produto.status.descricao}"
+									th:classappend="${produto.pendente ? 'label-danger' : 'label-success'}"></span>
+								</td>
+
+								<td class="text-center"><a class="btn btn-link btn-xs"
+									th:href="@{/produto/{id}(id=${produto.id})}" title="Editar"
+									rel="tooltip" data-placement="top"> <span
+										class="glyphicon glyphicon-pencil"></span>
+								</a> <a class="btn btn-link btn-xs" data-toggle="modal"
+									data-target="#confirmacaoExclusao"
+									th:attr="data-id=${produto.id}, data-descricao=${produto.nome}"
+									title="Excluir" rel="tooltip" data-placement="top"> <span
+										class="glyphicon glyphicon-remove"></span>
+								</a> <a class="btn btn-link btn-xs js-status"
+									th:if="${produto.pendente}" title="Receber" rel="tooltip"
+									data-placement="top" th:attr="data-id=${produto.id}"
+									th:href="@{/produto/{id}/receber(id=${produto.id})}"> <span
+										class="glyphicon glyphicon-check"></span>
+								</a></td>
+							</tr>
+							<tr>
+								<td colspan="12" th:if="${#lists.isEmpty(produtos)}">Nenhum
+									Produto foi encontrado</td>
+							</tr>
+						</tbody>					
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="confirmacaoExclusao" tabindex="-1"
+			data-keyboard="false" data-backdrop="static">
+
+			<div class="modal-dialog">
+				<form th:attr="data-url-base=@{/produto}" method="POST">
+					<input type="hidden" name="_method" value="DELETE" />
+
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Você tem certeza?</h4>
+						</div>
+
+						<div class="modal-body">
+							<span>Tem certeza que deseja apagar o Produto?</span>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-link" data-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-primary">Excluir</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+</html>

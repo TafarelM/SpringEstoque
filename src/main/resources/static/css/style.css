@@ -1,0 +1,37 @@
+/* TELA GRANDE	 */
+
+@media ( min-width: 768px) {
+	.panel-default {
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+	.alert {
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+}
+
+.panel-default {
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+.alert {
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+.navbar-brand {
+	padding-top: 8px;
+}
+
+.aw-link-panel {
+	float: right;
+	padding: 0px;
+}
+
+.aw-titulo-panel {
+	float: left;
+	padding-top: 2px;
+}
+
